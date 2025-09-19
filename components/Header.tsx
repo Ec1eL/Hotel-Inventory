@@ -1,14 +1,20 @@
+// components/Header.tsx
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Header() {
+type HeaderProps = {
+  onLoginClick: () => void;
+  onSignupClick: () => void;
+};
+
+export default function Header({ onLoginClick, onSignupClick }: HeaderProps) {
   return (
     <header className="bg-gray-900 text-white shadow-md">
       <nav className="container mx-auto flex items-center justify-between p-4">
         {/* Logo (gambar + teks, link ke Home) */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="/logo.jpeg"   // simpan gambar di folder public/logo.png
+            src="/logo.jpeg"
             alt="MyHotel Logo"
             width={40}
             height={40}
@@ -39,18 +45,18 @@ export default function Header() {
 
         {/* Tombol Login/SignUp */}
         <div className="space-x-3">
-          <Link
-            href="/login"
+          <button
+            onClick={onLoginClick}
             className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
           >
             Login
-          </Link>
-          <Link
-            href="/signup"
+          </button>
+          <button
+            onClick={onSignupClick}
             className="px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 transition"
           >
             Sign Up
-          </Link>
+          </button>
         </div>
       </nav>
     </header>

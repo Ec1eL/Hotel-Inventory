@@ -1,105 +1,118 @@
-// components/SearchBar.tsx
 "use client";
 import { useState } from "react";
 
 export default function SearchBar() {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
+  const [location, setLocation] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState(2);
   const [rooms, setRooms] = useState(1);
+  const [openDropdown, setOpenDropdown] = useState(false);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ location, checkIn, checkOut, guests, rooms });
+  };
 
   return (
-    <div className="bg-white rounded-full shadow flex items-center px-4 py-2 w-full max-w-4xl mx-auto">
+    <form
+      onSubmit={handleSearch}
+      className="bg-white p-6 rounded-2xl shadow-md w-full max-w-2xl space-y-4 relative"
+    >
       {/* Lokasi */}
-      <div className="flex-1 border-r px-3">
-        <label className="block text-xs text-gray-500">Lokasi / Hotel</label>
+      <div>
+        <label className="block font-medium mb-1">Lokasi / Hotel</label>
         <input
           type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           placeholder="Masukkan lokasi atau nama hotel"
-          className="w-full outline-none text-sm"
+          className="w-full border rounded-lg p-2"
         />
       </div>
 
       {/* Tanggal */}
-      <div className="flex-1 border-r px-3">
-        <label className="block text-xs text-gray-500">Tanggal</label>
-        <input type="date" className="w-full outline-none text-sm" />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block font-medium mb-1">Check-In</label>
+          <input
+            type="date"
+            value={checkIn}
+            onChange={(e) => setCheckIn(e.target.value)}
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
+        <div>
+          <label className="block font-medium mb-1">Check-Out</label>
+          <input
+            type="date"
+            value={checkOut}
+            onChange={(e) => setCheckOut(e.target.value)}
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
       </div>
 
-      {/* Tamu */}
-      <div className="flex-1 border-r px-3 relative">
-        <label className="block text-xs text-gray-500">Tamu</label>
-        <button
-          type="button"
-          className="w-full text-left text-sm"
-          onClick={() => setShowDropdown(!showDropdown)}
+      {/* Tamu & Kamar (Dropdown) */}
+      <div>
+        <label className="block font-medium mb-1">Tamu & Kamar</label>
+        <div
+          onClick={() => setOpenDropdown(!openDropdown)}
+          className="border rounded-lg p-2 cursor-pointer bg-gray-50 hover:bg-gray-100"
         >
-          {adults + children} tamu, {rooms} kamar
-        </button>
+          {guests} Tamu, {rooms} Kamar
+        </div>
 
-        {/* Dropdown tamu */}
-        {showDropdown && (
-          <div className="absolute top-14 left-0 bg-white shadow-lg rounded-lg p-4 w-64 z-10">
-            <div className="mb-3">
-              <p className="font-medium text-sm">Dewasa</p>
-              <div className="flex items-center gap-2">
+        {openDropdown && (
+          <div className="absolute bg-white border rounded-lg shadow-md mt-2 p-4 w-64 z-10">
+            {/* Tamu */}
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-medium">Tamu</span>
+              <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setAdults(Math.max(1, adults - 1))}
-                  className="px-2 py-1 border rounded"
+                  type="button"
+                  onClick={() => setGuests((prev) => Math.max(1, prev - 1))}
+                  className="px-3 py-1 bg-gray-200 rounded-lg"
                 >
-                  -
+                  ➖
                 </button>
-                <span>{adults}</span>
+                <span>{guests}</span>
                 <button
-                  onClick={() => setAdults(adults + 1)}
-                  className="px-2 py-1 border rounded"
+                  type="button"
+                  onClick={() => setGuests((prev) => prev + 1)}
+                  className="px-3 py-1 bg-gray-200 rounded-lg"
                 >
-                  +
+                  ➕
                 </button>
               </div>
             </div>
 
-            <div className="mb-3">
-              <p className="font-medium text-sm">Anak-anak</p>
-              <div className="flex items-center gap-2">
+            {/* Kamar */}
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-medium">Kamar</span>
+              <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setChildren(Math.max(0, children - 1))}
-                  className="px-2 py-1 border rounded"
+                  type="button"
+                  onClick={() => setRooms((prev) => Math.max(1, prev - 1))}
+                  className="px-3 py-1 bg-gray-200 rounded-lg"
                 >
-                  -
-                </button>
-                <span>{children}</span>
-                <button
-                  onClick={() => setChildren(children + 1)}
-                  className="px-2 py-1 border rounded"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <p className="font-medium text-sm">Kamar</p>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setRooms(Math.max(1, rooms - 1))}
-                  className="px-2 py-1 border rounded"
-                >
-                  -
+                  ➖
                 </button>
                 <span>{rooms}</span>
                 <button
-                  onClick={() => setRooms(rooms + 1)}
-                  className="px-2 py-1 border rounded"
+                  type="button"
+                  onClick={() => setRooms((prev) => prev + 1)}
+                  className="px-3 py-1 bg-gray-200 rounded-lg"
                 >
-                  +
+                  ➕
                 </button>
               </div>
             </div>
 
             <button
-              className="w-full bg-blue-600 text-white rounded py-2 mt-2"
-              onClick={() => setShowDropdown(false)}
+              type="button"
+              onClick={() => setOpenDropdown(false)}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700"
             >
               Selesai
             </button>
@@ -108,11 +121,12 @@ export default function SearchBar() {
       </div>
 
       {/* Tombol Cari */}
-      <div className="px-3">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded-full">
-          Cari
-        </button>
-      </div>
-    </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700"
+      >
+        Cari Hotel
+      </button>
+    </form>
   );
 }
